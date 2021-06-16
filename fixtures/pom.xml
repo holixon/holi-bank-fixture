@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>io.holixon.fixtures.bank._</groupId>
+    <artifactId>holi-bank-fixtures</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>fixtures</artifactId>
+  <name>Holi-Bank Fixtures - Impl - Root</name>
+  <description>Root of fixtures module</description>
+  <packaging>pom</packaging>
+
+  <properties>
+    <maven.install.skip>true</maven.install.skip>
+    <gpg.skip>true</gpg.skip>
+  </properties>
+
+  <modules>
+    <module>holi-bank-command</module>
+    <module>holi-bank-domain</module>
+    <module>holi-bank-event</module>
+  </modules>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.holixon.fixtures.bank</groupId>
+        <artifactId>holi-bank-event</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>io.holixon.fixtures.bank</groupId>
+        <artifactId>holi-bank-command</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.20</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+</project>

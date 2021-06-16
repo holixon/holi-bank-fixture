@@ -1,0 +1,34 @@
+{
+  "type": "record",
+  "namespace": "fixtures.bank.event.transfer",
+  "name": "MoneyTransferInitializedEvent",
+  "doc": "A money transfer between source and target account started",
+  "revision": "1",
+  "fields": [
+    {
+      "name": "sourceAccountId",
+      "type": {
+        "type": "string",
+        "avro.java.string": "String"
+      }
+    },
+    {
+      "name": "targetAccountId",
+      "type": {
+        "type": "string",
+        "avro.java.string": "String"
+      }
+    },
+    {
+      "name": "transactionId",
+      "type": {
+        "type": "string",
+        "avro.java.string": "String"
+      }
+    },
+    {
+      "name": "amount",
+      "type": "int"
+    }
+  ]
+}

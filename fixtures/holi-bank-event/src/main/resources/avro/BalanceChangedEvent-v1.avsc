@@ -1,0 +1,20 @@
+{
+  "type": "record",
+  "namespace": "fixtures.bank.event",
+  "name": "BalanceChangedEvent",
+  "doc": "Domain event containing accountId and new balance",
+  "revision": "1",
+  "fields": [
+    {
+      "name": "accountId",
+      "type": {
+        "type": "string",
+        "avro.java.string": "String"
+      }
+    },
+    {
+      "name": "newBalance",
+      "type": "int"
+    }
+  ]
+}

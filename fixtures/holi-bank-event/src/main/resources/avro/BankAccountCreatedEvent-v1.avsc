@@ -1,0 +1,24 @@
+{
+  "type": "record",
+  "namespace": "fixtures.bank.event",
+  "name": "BankAccountCreatedEvent",
+  "doc": "A bank account has been created",
+  "revision": "1",
+  "fields": [
+    {
+      "name": "accountId",
+      "type": {
+        "type": "string",
+        "avro.java.string": "String"
+      }
+    },
+    {
+      "name": "initialBalance",
+      "type": "int"
+    },
+    {
+      "name": "maximalBalance",
+      "type": "int"
+    }
+  ]
+}
