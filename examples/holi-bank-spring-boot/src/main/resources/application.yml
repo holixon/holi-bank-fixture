@@ -1,0 +1,22 @@
+server:
+  port: 9090
+
+spring:
+  application:
+    name: holi-bank
+  main:
+    banner-mode: off
+
+axon:
+  axonserver:
+    enabled: true
+  serializer:
+    general: xstream
+#
+#springdoc:
+#  swagger-ui:
+#    path: "/swagger-ui.html"
+logging:
+  level:
+    org.springframework.context.support: WARN
+
