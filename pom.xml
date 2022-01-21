@@ -27,7 +27,7 @@
 
     <axon-bom.version>4.5.10</axon-bom.version>
     <avro.version>1.11.0</avro.version>
-    <spring-boot.version>2.6.2</spring-boot.version>
+    <spring-boot.version>2.6.3</spring-boot.version>
 
     <jackson.version>2.12.3</jackson.version>
     <junit.version>4.13.2</junit.version>
