@@ -11,12 +11,10 @@
 
   <groupId>io.holixon.fixtures.bank</groupId>
   <artifactId>holi-bank-all</artifactId>
+  <name>${project.artifactId}</name>
+  <description>All fixtures in one dependency.</description>
 
   <dependencies>
-    <dependency>
-      <groupId>io.holixon.fixtures.bank</groupId>
-      <artifactId>holi-bank-command</artifactId>
-    </dependency>
     <dependency>
       <groupId>io.holixon.fixtures.bank</groupId>
       <artifactId>holi-bank-command</artifactId>
