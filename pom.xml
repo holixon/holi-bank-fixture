@@ -25,9 +25,9 @@
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
 
-    <axon-bom.version>4.5.8</axon-bom.version>
+    <axon-bom.version>4.5.11</axon-bom.version>
     <avro.version>1.11.0</avro.version>
-    <spring-boot.version>2.6.2</spring-boot.version>
+    <spring-boot.version>2.6.3</spring-boot.version>
 
     <jackson.version>2.12.3</jackson.version>
     <junit.version>4.13.2</junit.version>
@@ -79,7 +79,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.8.1</version>
+          <version>3.9.0</version>
           <configuration>
             <encoding>${project.build.sourceEncoding}</encoding>
             <source>${maven.compiler.source}</source>
@@ -222,7 +222,7 @@
         <!-- JAR -->
         <plugin>
           <artifactId>maven-jar-plugin</artifactId>
-          <version>3.2.0</version>
+          <version>3.2.2</version>
           <configuration>
             <archive>
               <manifest>
