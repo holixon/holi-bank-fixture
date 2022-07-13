@@ -19,6 +19,7 @@ import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
+import org.axonframework.messaging.MetaData;
 import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.spring.stereotype.Aggregate;
 
@@ -28,7 +29,7 @@ import static java.util.Optional.of;
 import static java.util.Optional.ofNullable;
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
-@Aggregate(snapshotTriggerDefinition = BankAccountAggregate.SNAPSHOT_TRIGGER)
+@Aggregate(snapshotTriggerDefinition = BankAccountAggregate.SNAPSHOT_TRIGGER, cache = BankAccountAggregate.CACHE)
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -37,6 +38,7 @@ import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 public class BankAccountAggregate {
 
   public static final String SNAPSHOT_TRIGGER = "bankAccountAggregateSnapshotTriggerDefinition";
+  public static final String CACHE = "bankAccountAggregateCache";
 
   public enum Configuration {
     ;
@@ -80,30 +82,16 @@ public class BankAccountAggregate {
     return new BankAccountAggregate();
   }
 
-  @EventSourcingHandler
-  void on(CreateBankAccountCommand evt) {
-    log.info("replaying event: {}", evt);
-    this.accountId = evt.getAccountId();
-    this.currentBalance = evt.getInitialBalance();
-    this.maximalBalance = evt.getMaximalBalance();
-  }
-
   @CommandHandler
   void handle(WithdrawMoneyCommand cmd) {
     checkForInsufficientBalance(cmd.getAmount());
 
     apply(
-      MoneyWithdrawnEvent.newBuilder()
-        .setAccountId(accountId)
-        .setAmount(cmd.getAmount())
-        .build()
+        MoneyWithdrawnEvent.newBuilder()
+                           .setAccountId(accountId)
+                           .setAmount(cmd.getAmount())
+                           .build()
     );
-  }
-
-  @EventSourcingHandler
-  void on(MoneyWithdrawnEvent evt) {
-    log.info("replaying event: {}", evt);
-    decreaseCurrentBalance(evt.getAmount());
   }
 
   @CommandHandler
@@ -111,18 +99,33 @@ public class BankAccountAggregate {
     checkForMaximalBalanceExceeded(cmd.getAmount());
 
     apply(
-      MoneyDepositedEvent.newBuilder()
-        .setAccountId(accountId)
-        .setAmount(cmd.getAmount())
-        .build()
+        MoneyDepositedEvent.newBuilder()
+                           .setAccountId(accountId)
+                           .setAmount(cmd.getAmount())
+                           .build()
     );
   }
 
   @EventSourcingHandler
-  void on(MoneyDepositedEvent evt) {
-    log.info("replaying event: {}", evt);
+  void on(BankAccountCreatedEvent evt, MetaData metaData) {
+    log.info("replaying event: {} with metadata {}", evt, metaData);
+    this.accountId = evt.getAccountId();
+    this.currentBalance = evt.getInitialBalance();
+    this.maximalBalance = evt.getMaximalBalance();
+  }
+
+  @EventSourcingHandler
+  void on(MoneyWithdrawnEvent evt, MetaData metaData) {
+    log.info("replaying event: {} with metadata {}", evt, metaData);
+    decreaseCurrentBalance(evt.getAmount());
+  }
+
+  @EventSourcingHandler
+  void on(MoneyDepositedEvent evt, MetaData metaData) {
+    log.info("replaying event: {} with metadata {}", evt, metaData);
     increaseCurrentBalance(evt.getAmount());
   }
+
 
 //  @CommandHandler
 //  void handle(InitializeMoneyTransferCommand cmd) {

@@ -7,6 +7,8 @@ import fixtures.bank.domain.BankAccountAggregate.Configuration;
 import fixtures.bank.query.BankAccountCurrentBalanceDto;
 import fixtures.bank.query.FindAllBankAccountCurrentBalances;
 import fixtures.bank.query.FindBankAccountCurrentBalanceByAccountId;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.queryhandling.QueryGateway;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/bankaccounts")
+@Tag(name = "account")
 public class HoliBankController {
 
   private final CommandGateway commandGateway;
