@@ -1,4 +1,4 @@
-package fixtures.bank.domain.exception;
+package fixtures.bank.commandmodel.exception;
 
 import java.util.List;
 

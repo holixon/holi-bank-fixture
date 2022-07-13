@@ -10,22 +10,32 @@
   </parent>
 
   <groupId>io.holixon.fixtures.bank</groupId>
-  <artifactId>holi-bank-domain</artifactId>
+  <artifactId>holi-bank-rest-adapter</artifactId>
+  <name>Holi-Bank Fixtures - Rest Adapter</name>
 
   <dependencies>
     <dependency>
-      <groupId>io.holixon.fixtures.bank</groupId>
-      <artifactId>holi-bank-event</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.holixon.fixtures.bank</groupId>
-      <artifactId>holi-bank-command</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.axonframework</groupId>
-      <artifactId>axon-spring</artifactId>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>org.springdoc</groupId>
+      <artifactId>springdoc-openapi-ui</artifactId>
+      <version>1.6.9</version>
+    </dependency>
+
+    <dependency>
+      <groupId>io.holixon.fixtures.bank</groupId>
+      <artifactId>holi-bank-all</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
 </project>

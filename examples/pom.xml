@@ -21,6 +21,7 @@
 
   <modules>
     <module>holi-bank-spring-boot</module>
+    <module>holi-bank-spring-boot-jpa</module>
   </modules>
 
 </project>

@@ -10,31 +10,22 @@
   </parent>
 
   <groupId>io.holixon.fixtures.bank</groupId>
-  <artifactId>holi-bank-all</artifactId>
-  <name>${project.artifactId}</name>
-  <description>All fixtures in one dependency.</description>
+  <artifactId>holi-bank-command-model</artifactId>
 
   <dependencies>
-    <dependency>
-      <groupId>io.holixon.fixtures.bank</groupId>
-      <artifactId>holi-bank-command</artifactId>
-    </dependency>
     <dependency>
       <groupId>io.holixon.fixtures.bank</groupId>
       <artifactId>holi-bank-event</artifactId>
     </dependency>
     <dependency>
       <groupId>io.holixon.fixtures.bank</groupId>
-      <artifactId>holi-bank-query</artifactId>
+      <artifactId>holi-bank-command</artifactId>
     </dependency>
     <dependency>
-      <groupId>io.holixon.fixtures.bank</groupId>
-      <artifactId>holi-bank-projection</artifactId>
+      <groupId>org.axonframework</groupId>
+      <artifactId>axon-spring</artifactId>
     </dependency>
-    <dependency>
-      <groupId>io.holixon.fixtures.bank</groupId>
-      <artifactId>holi-bank-command-model</artifactId>
-    </dependency>
+
   </dependencies>
 
 </project>

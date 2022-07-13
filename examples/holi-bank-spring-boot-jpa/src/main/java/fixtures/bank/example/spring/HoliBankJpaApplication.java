@@ -19,17 +19,16 @@ import org.springframework.context.annotation.Import;
   BankAggregateTuningConfiguration.class,
   HoliBankRestConfiguration.class
 })
-public class HoliBankApplication {
+public class HoliBankJpaApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(HoliBankApplication.class, args);
+    SpringApplication.run(HoliBankJpaApplication.class, args);
   }
 
   @Bean
   public BankAccountCurrentBalanceProjection bankAccountCurrentBalanceProjection() {
     return new BankAccountCurrentBalanceProjection();
   }
-
 
   @Bean
   public XStream unsecuredXStream() {

@@ -1,14 +1,13 @@
-package fixtures.bank.domain;
+package fixtures.bank.commandmodel;
 
 import fixtures.bank.command.CreateBankAccountCommand;
 import fixtures.bank.command.DepositMoneyCommand;
 import fixtures.bank.command.WithdrawMoneyCommand;
-import fixtures.bank.domain.exception.InsufficientBalanceException;
-import fixtures.bank.domain.exception.MaximalBalanceExceededException;
-import fixtures.bank.domain.exception.MaximumActiveMoneyTransfersReachedException;
+import fixtures.bank.commandmodel.exception.InsufficientBalanceException;
+import fixtures.bank.commandmodel.exception.MaximalBalanceExceededException;
+import fixtures.bank.commandmodel.exception.MaximumActiveMoneyTransfersReachedException;
 import fixtures.bank.event.BalanceChangedEvent;
 import fixtures.bank.event.BankAccountCreatedEvent;
-import fixtures.bank.event.BankAccountSnapshotEvent;
 import fixtures.bank.event.MoneyDepositedEvent;
 import fixtures.bank.event.MoneyWithdrawnEvent;
 import lombok.AllArgsConstructor;
@@ -20,7 +19,6 @@ import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.eventsourcing.EventSourcingHandler;
-import org.axonframework.messaging.MetaData;
 import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.spring.stereotype.Aggregate;
 
@@ -33,7 +31,7 @@ import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 @Aggregate(
   snapshotTriggerDefinition = BankAccountAggregate.SNAPSHOT_TRIGGER
   // ,  cache = BankAccountAggregate.CACHE
-)
+  )
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -132,15 +130,6 @@ public class BankAccountAggregate {
     log.info("replaying event: {}", evt);
     increaseCurrentBalance(evt.getAmount());
   }
-
-  @EventSourcingHandler
-  void on (BankAccountSnapshotEvent evt) {
-    log.info("replaying snapshot: {}", evt);
-    this.accountId = evt.getAccountId();
-    this.currentBalance = evt.getCurrentBalance();
-    this.maximalBalance = evt.getMaxBalance();
-  }
-
 
   //  @CommandHandler
   //  void handle(InitializeMoneyTransferCommand cmd) {

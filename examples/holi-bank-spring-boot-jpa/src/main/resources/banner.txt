@@ -1,6 +1,6 @@
 -------------------------------------------------------------------------------
-  Holibank example application, Spring Boot ${spring-boot.version}
+  Holibank JPA example application, Spring Boot ${spring-boot.version}
 -------------------------------------------------------------------------------
 
   REST Console: http://localhost:${server.port}${springdoc.swagger-ui.path}
-  Axon Console: http://localhost:8024/
+    H2 Console: http://localhost:${server.port}${spring.h2.console.path}

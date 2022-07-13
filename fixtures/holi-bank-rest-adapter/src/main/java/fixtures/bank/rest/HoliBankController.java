@@ -1,13 +1,12 @@
-package fixtures.bank.example.spring.rest;
+package fixtures.bank.rest;
 
 import fixtures.bank.command.CreateBankAccountCommand;
 import fixtures.bank.command.DepositMoneyCommand;
 import fixtures.bank.command.WithdrawMoneyCommand;
-import fixtures.bank.domain.BankAccountAggregate.Configuration;
+import fixtures.bank.commandmodel.BankAccountAggregate.Configuration;
 import fixtures.bank.query.BankAccountCurrentBalanceDto;
 import fixtures.bank.query.FindAllBankAccountCurrentBalances;
 import fixtures.bank.query.FindBankAccountCurrentBalanceByAccountId;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.queryhandling.QueryGateway;
@@ -44,9 +43,9 @@ public class HoliBankController {
     @RequestParam(value = "initialBalance", required = false) Integer initialBalance
   ) {
     commandGateway.sendAndWait(CreateBankAccountCommand.builder()
-      .accountId(bankAccountId)
-      .initialBalance(Optional.ofNullable(initialBalance).orElse(Configuration.DEFAULT_INITIAL_BALANCE))
-      .build());
+                                                       .accountId(bankAccountId)
+                                                       .initialBalance(Optional.ofNullable(initialBalance).orElse(Configuration.DEFAULT_INITIAL_BALANCE))
+                                                       .build());
     return ResponseEntity.ok().build();
   }
 
@@ -57,14 +56,14 @@ public class HoliBankController {
   ) {
     if (amount > 0) {
       commandGateway.sendAndWait(DepositMoneyCommand.builder()
-        .accountId(bankAccountId)
-        .amount(amount)
-        .build());
+                                                    .accountId(bankAccountId)
+                                                    .amount(amount)
+                                                    .build());
     } else {
       commandGateway.sendAndWait(WithdrawMoneyCommand.builder()
-        .accountId(bankAccountId)
-        .amount(-amount)
-        .build());
+                                                     .accountId(bankAccountId)
+                                                     .amount(-amount)
+                                                     .build());
     }
 
     return ResponseEntity.ok().build();
