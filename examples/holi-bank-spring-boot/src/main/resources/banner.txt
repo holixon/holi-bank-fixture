@@ -1,0 +1,5 @@
+-------------------------------------------------------------------------------
+ Holibank example application
+-------------------------------------------------------------------------------
+
+  REST Console: http://localhost:${server.port}${springdoc.swagger-ui.path}

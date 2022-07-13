@@ -1,9 +1,5 @@
 package fixtures.bank.domain;
 
-import static java.util.Optional.of;
-import static java.util.Optional.ofNullable;
-import static org.axonframework.modelling.command.AggregateLifecycle.apply;
-
 import fixtures.bank.command.CreateBankAccountCommand;
 import fixtures.bank.command.DepositMoneyCommand;
 import fixtures.bank.command.WithdrawMoneyCommand;
@@ -14,7 +10,6 @@ import fixtures.bank.event.BalanceChangedEvent;
 import fixtures.bank.event.BankAccountCreatedEvent;
 import fixtures.bank.event.MoneyDepositedEvent;
 import fixtures.bank.event.MoneyWithdrawnEvent;
-import java.util.Collections;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,7 +22,13 @@ import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.modelling.command.AggregateIdentifier;
 import org.axonframework.spring.stereotype.Aggregate;
 
-@Aggregate
+import java.util.Collections;
+
+import static java.util.Optional.of;
+import static java.util.Optional.ofNullable;
+import static org.axonframework.modelling.command.AggregateLifecycle.apply;
+
+@Aggregate(snapshotTriggerDefinition = BankAccountAggregate.SNAPSHOT_TRIGGER)
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -35,11 +36,13 @@ import org.axonframework.spring.stereotype.Aggregate;
 @Slf4j
 public class BankAccountAggregate {
 
+  public static final String SNAPSHOT_TRIGGER = "bankAccountAggregateSnapshotTriggerDefinition";
+
   public enum Configuration {
     ;
 
     public static final int DEFAULT_INITIAL_BALANCE = 0;
-    // for this example we assume that there is a maximum of money allowd in your account, so the transfer saga can fail.
+    // for this example we assume that there is a maximum of money allowed in your account, so the transfer saga can fail.
     public static final int DEFAULT_MAXIMAL_BALANCE = 1000;
     public static final int MAXIMUM_NUMBER_OF_ACTIVE_MONEY_TRANSFERS = 1;
 

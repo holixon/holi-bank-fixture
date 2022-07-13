@@ -4,18 +4,22 @@ server:
 spring:
   application:
     name: holi-bank
-  main:
-    banner-mode: off
 
 axon:
+  aggregate:
+    bank-account:
+      snapshot-threshold: 5
   axonserver:
     enabled: true
   serializer:
     general: xstream
-#
-#springdoc:
-#  swagger-ui:
-#    path: "/swagger-ui.html"
+
+springdoc:
+  swagger-ui:
+    path: "/swagger-ui/index.html"
+    use-root-path: true
+  packages-to-scan: fixtures.bank.example.spring.rest
+
 logging:
   level:
     org.springframework.context.support: WARN
