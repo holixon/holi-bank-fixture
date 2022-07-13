@@ -8,6 +8,7 @@ import fixtures.bank.domain.exception.MaximalBalanceExceededException;
 import fixtures.bank.domain.exception.MaximumActiveMoneyTransfersReachedException;
 import fixtures.bank.event.BalanceChangedEvent;
 import fixtures.bank.event.BankAccountCreatedEvent;
+import fixtures.bank.event.BankAccountSnapshotEvent;
 import fixtures.bank.event.MoneyDepositedEvent;
 import fixtures.bank.event.MoneyWithdrawnEvent;
 import lombok.AllArgsConstructor;
@@ -29,7 +30,10 @@ import static java.util.Optional.of;
 import static java.util.Optional.ofNullable;
 import static org.axonframework.modelling.command.AggregateLifecycle.apply;
 
-@Aggregate(snapshotTriggerDefinition = BankAccountAggregate.SNAPSHOT_TRIGGER, cache = BankAccountAggregate.CACHE)
+@Aggregate(
+  snapshotTriggerDefinition = BankAccountAggregate.SNAPSHOT_TRIGGER
+  // ,  cache = BankAccountAggregate.CACHE
+)
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -73,11 +77,13 @@ public class BankAccountAggregate {
 
   @CommandHandler
   public static BankAccountAggregate handle(CreateBankAccountCommand cmd) {
-    apply(BankAccountCreatedEvent.newBuilder()
-      .setAccountId(cmd.getAccountId())
-      .setInitialBalance(of(cmd.getInitialBalance()).orElse(Configuration.DEFAULT_INITIAL_BALANCE))
-      .setMaximalBalance(ofNullable(cmd.getMaximalBalance()).orElse(Configuration.DEFAULT_MAXIMAL_BALANCE))
-      .build());
+    apply(
+      BankAccountCreatedEvent
+        .newBuilder()
+        .setAccountId(cmd.getAccountId())
+        .setInitialBalance(of(cmd.getInitialBalance()).orElse(Configuration.DEFAULT_INITIAL_BALANCE))
+        .setMaximalBalance(ofNullable(cmd.getMaximalBalance()).orElse(Configuration.DEFAULT_MAXIMAL_BALANCE))
+        .build());
 
     return new BankAccountAggregate();
   }
@@ -85,12 +91,12 @@ public class BankAccountAggregate {
   @CommandHandler
   void handle(WithdrawMoneyCommand cmd) {
     checkForInsufficientBalance(cmd.getAmount());
-
     apply(
-        MoneyWithdrawnEvent.newBuilder()
-                           .setAccountId(accountId)
-                           .setAmount(cmd.getAmount())
-                           .build()
+      MoneyWithdrawnEvent
+        .newBuilder()
+        .setAccountId(accountId)
+        .setAmount(cmd.getAmount())
+        .build()
     );
   }
 
@@ -99,112 +105,121 @@ public class BankAccountAggregate {
     checkForMaximalBalanceExceeded(cmd.getAmount());
 
     apply(
-        MoneyDepositedEvent.newBuilder()
-                           .setAccountId(accountId)
-                           .setAmount(cmd.getAmount())
-                           .build()
+      MoneyDepositedEvent
+        .newBuilder()
+        .setAccountId(accountId)
+        .setAmount(cmd.getAmount())
+        .build()
     );
   }
 
   @EventSourcingHandler
-  void on(BankAccountCreatedEvent evt, MetaData metaData) {
-    log.info("replaying event: {} with metadata {}", evt, metaData);
+  void on(BankAccountCreatedEvent evt) {
+    log.info("replaying event: {}", evt);
     this.accountId = evt.getAccountId();
     this.currentBalance = evt.getInitialBalance();
     this.maximalBalance = evt.getMaximalBalance();
   }
 
   @EventSourcingHandler
-  void on(MoneyWithdrawnEvent evt, MetaData metaData) {
-    log.info("replaying event: {} with metadata {}", evt, metaData);
+  void on(MoneyWithdrawnEvent evt) {
+    log.info("replaying event: {}", evt);
     decreaseCurrentBalance(evt.getAmount());
   }
 
   @EventSourcingHandler
-  void on(MoneyDepositedEvent evt, MetaData metaData) {
-    log.info("replaying event: {} with metadata {}", evt, metaData);
+  void on(MoneyDepositedEvent evt) {
+    log.info("replaying event: {}", evt);
     increaseCurrentBalance(evt.getAmount());
   }
 
+  @EventSourcingHandler
+  void on (BankAccountSnapshotEvent evt) {
+    log.info("replaying snapshot: {}", evt);
+    this.accountId = evt.getAccountId();
+    this.currentBalance = evt.getCurrentBalance();
+    this.maximalBalance = evt.getMaxBalance();
+  }
 
-//  @CommandHandler
-//  void handle(InitializeMoneyTransferCommand cmd) {
-//    checkForActiveMoneyTransfer();
-//    checkForInsufficientBalance(cmd.getAmount());
-//
-//    apply(MoneyTransferInitializedEvent.builder()
-//      .transactionId(cmd.getTransactionId())
-//      .sourceAccountId(cmd.getSourceAccountId())
-//      .targetAccountId(cmd.getTargetAccountId())
-//      .amount(cmd.getAmount())
-//      .build());
-//  }
-//
-//  @EventSourcingHandler
-//  void on(MoneyTransferInitializedEvent evt) {
-//    log.info("replaying event: {}", evt);
-//    this.activeMoneyTransfer = ActiveMoneyTransfer.builder()
-//      .transactionId(evt.getTransactionId())
-//      .amount(evt.getAmount())
-//      .build();
-//  }
-//
-//  @CommandHandler
-//  void handle(ReceiveMoneyTransferCommand cmd) {
-//    checkForMaximalBalanceExceeded(cmd.getAmount());
-//
-//    apply(MoneyTransferReceivedEvent.builder()
-//      .sourceAccountId(cmd.getSourceAccountId())
-//      .targetAccountId(cmd.getTargetAccountId())
-//      .transactionId(cmd.getTransactionId())
-//      .amount(cmd.getAmount())
-//      .build()
-//    );
-//  }
-//
-//  @EventSourcingHandler
-//  void on(MoneyTransferReceivedEvent evt) {
-//    log.info("replaying event: {}", evt);
-//    increaseCurrentBalance(evt.getAmount());
-//  }
-//
-//  @CommandHandler
-//  void handle(CompleteMoneyTransferCommand cmd) {
-//    if (activeMoneyTransfer == null || !activeMoneyTransfer.transactionId.equals(cmd.getTransactionId())) {
-//      throw new IllegalStateException("not participating in transaction: " + cmd.getTransactionId());
-//    }
-//
-//    apply(MoneyTransferCompletedEvent.builder()
-//      .sourceAccountId(cmd.getSourceAccountId())
-//      .transactionId(cmd.getTransactionId())
-//      .amount(cmd.getAmount())
-//      .build()
-//    );
-//  }
-//
-//  @EventSourcingHandler
-//  void on(MoneyTransferCompletedEvent evt) {
-//    decreaseCurrentBalance(evt.getAmount());
-//    activeMoneyTransfer = null;
-//  }
-//
-//  @CommandHandler
-//  void handle(RollBackMoneyTransferCommand cmd) {
-//    if (activeMoneyTransfer == null || !activeMoneyTransfer.transactionId.equals(cmd.getTransactionId())) {
-//      throw new IllegalStateException("not participating in transaction: " + cmd.getTransactionId());
-//    }
-//
-//    apply(MoneyTransferRolledBackEvent.builder()
-//      .sourceAccountId(cmd.getSourceAccountId())
-//      .transactionId(cmd.getTransactionId())
-//      .build()
-//    );
-//  }
-//
-//  @EventSourcingHandler
-//  void on(MoneyTransferRolledBackEvent evt) {
-//    activeMoneyTransfer = null;
-//  }
+
+  //  @CommandHandler
+  //  void handle(InitializeMoneyTransferCommand cmd) {
+  //    checkForActiveMoneyTransfer();
+  //    checkForInsufficientBalance(cmd.getAmount());
+  //
+  //    apply(MoneyTransferInitializedEvent.builder()
+  //      .transactionId(cmd.getTransactionId())
+  //      .sourceAccountId(cmd.getSourceAccountId())
+  //      .targetAccountId(cmd.getTargetAccountId())
+  //      .amount(cmd.getAmount())
+  //      .build());
+  //  }
+  //
+  //  @EventSourcingHandler
+  //  void on(MoneyTransferInitializedEvent evt) {
+  //    log.info("replaying event: {}", evt);
+  //    this.activeMoneyTransfer = ActiveMoneyTransfer.builder()
+  //      .transactionId(evt.getTransactionId())
+  //      .amount(evt.getAmount())
+  //      .build();
+  //  }
+  //
+  //  @CommandHandler
+  //  void handle(ReceiveMoneyTransferCommand cmd) {
+  //    checkForMaximalBalanceExceeded(cmd.getAmount());
+  //
+  //    apply(MoneyTransferReceivedEvent.builder()
+  //      .sourceAccountId(cmd.getSourceAccountId())
+  //      .targetAccountId(cmd.getTargetAccountId())
+  //      .transactionId(cmd.getTransactionId())
+  //      .amount(cmd.getAmount())
+  //      .build()
+  //    );
+  //  }
+  //
+  //  @EventSourcingHandler
+  //  void on(MoneyTransferReceivedEvent evt) {
+  //    log.info("replaying event: {}", evt);
+  //    increaseCurrentBalance(evt.getAmount());
+  //  }
+  //
+  //  @CommandHandler
+  //  void handle(CompleteMoneyTransferCommand cmd) {
+  //    if (activeMoneyTransfer == null || !activeMoneyTransfer.transactionId.equals(cmd.getTransactionId())) {
+  //      throw new IllegalStateException("not participating in transaction: " + cmd.getTransactionId());
+  //    }
+  //
+  //    apply(MoneyTransferCompletedEvent.builder()
+  //      .sourceAccountId(cmd.getSourceAccountId())
+  //      .transactionId(cmd.getTransactionId())
+  //      .amount(cmd.getAmount())
+  //      .build()
+  //    );
+  //  }
+  //
+  //  @EventSourcingHandler
+  //  void on(MoneyTransferCompletedEvent evt) {
+  //    decreaseCurrentBalance(evt.getAmount());
+  //    activeMoneyTransfer = null;
+  //  }
+  //
+  //  @CommandHandler
+  //  void handle(RollBackMoneyTransferCommand cmd) {
+  //    if (activeMoneyTransfer == null || !activeMoneyTransfer.transactionId.equals(cmd.getTransactionId())) {
+  //      throw new IllegalStateException("not participating in transaction: " + cmd.getTransactionId());
+  //    }
+  //
+  //    apply(MoneyTransferRolledBackEvent.builder()
+  //      .sourceAccountId(cmd.getSourceAccountId())
+  //      .transactionId(cmd.getTransactionId())
+  //      .build()
+  //    );
+  //  }
+  //
+  //  @EventSourcingHandler
+  //  void on(MoneyTransferRolledBackEvent evt) {
+  //    activeMoneyTransfer = null;
+  //  }
 
   /**
    * @return stored current balance minus amount(s) reserved by active money transfers
@@ -216,9 +231,9 @@ public class BankAccountAggregate {
   private void increaseCurrentBalance(int amount) {
     this.currentBalance += amount;
     apply(BalanceChangedEvent.newBuilder()
-      .setAccountId(accountId)
-      .setNewBalance(this.currentBalance)
-      .build());
+                             .setAccountId(accountId)
+                             .setNewBalance(this.currentBalance)
+                             .build());
   }
 
   private void decreaseCurrentBalance(int amount) {
@@ -233,7 +248,8 @@ public class BankAccountAggregate {
 
   private void checkForActiveMoneyTransfer() {
     if (activeMoneyTransfer != null) {
-      throw new MaximumActiveMoneyTransfersReachedException(Configuration.MAXIMUM_NUMBER_OF_ACTIVE_MONEY_TRANSFERS,
+      throw new MaximumActiveMoneyTransfersReachedException(
+        Configuration.MAXIMUM_NUMBER_OF_ACTIVE_MONEY_TRANSFERS,
         Collections.singletonList(activeMoneyTransfer.transactionId));
     }
   }

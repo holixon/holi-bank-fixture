@@ -1,0 +1,24 @@
+{
+  "type": "record",
+  "namespace": "fixtures.bank.event",
+  "name": "BankAccountSnapshotEvent",
+  "doc": "Domain event containing accountId current balance and max account",
+  "revision": "1",
+  "fields": [
+    {
+      "name": "accountId",
+      "type": {
+        "type": "string",
+        "avro.java.string": "String"
+      }
+    },
+    {
+      "name": "currentBalance",
+      "type": "int"
+    },
+    {
+      "name": "maxBalance",
+      "type": "int"
+    }
+  ]
+}
