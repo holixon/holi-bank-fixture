@@ -26,7 +26,7 @@
     <maven.compiler.target>${java.version}</maven.compiler.target>
 
     <axon-bom.version>4.9.4</axon-bom.version>
-    <avro.version>1.11.2</avro.version>
+    <avro.version>1.11.3</avro.version>
     <spring-boot.version>2.7.5</spring-boot.version>
 
     <jackson.version>2.12.3</jackson.version>
@@ -79,7 +79,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.11.0</version>
+          <version>3.13.0</version>
           <configuration>
             <encoding>${project.build.sourceEncoding}</encoding>
             <source>${maven.compiler.source}</source>
@@ -118,7 +118,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-assembly-plugin</artifactId>
-          <version>3.6.0</version>
+          <version>3.7.1</version>
           <configuration>
             <descriptorSourceDirectory>assembly</descriptorSourceDirectory>
             <archiverConfig>
@@ -142,7 +142,7 @@
         <plugin>
           <groupId>org.jacoco</groupId>
           <artifactId>jacoco-maven-plugin</artifactId>
-          <version>0.8.11</version>
+          <version>0.8.12</version>
           <executions>
             <execution>
               <id>pre-unit-test</id>
@@ -162,7 +162,7 @@
         <!-- Surefire -->
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>3.1.2</version>
+          <version>3.2.5</version>
           <configuration>
             <useSystemClassLoader>false</useSystemClassLoader>
             <shutdown>kill</shutdown>
@@ -195,7 +195,7 @@
         <plugin>
           <groupId>org.jetbrains.dokka</groupId>
           <artifactId>dokka-maven-plugin</artifactId>
-          <version>1.9.10</version>
+          <version>1.9.20</version>
           <configuration>
             <!-- Conditional on maven property set per-project -->
             <skip>${dokka.skip}</skip>
@@ -233,7 +233,7 @@
         </plugin>
         <plugin>
           <artifactId>maven-source-plugin</artifactId>
-          <version>3.3.0</version>
+          <version>3.3.1</version>
           <executions>
             <execution>
               <id>attach-sources</id>
@@ -248,7 +248,7 @@
         <!-- Enforcer -->
         <plugin>
           <artifactId>maven-enforcer-plugin</artifactId>
-          <version>3.4.0</version>
+          <version>3.4.1</version>
           <executions>
             <execution>
               <id>enforce-java</id>
@@ -274,7 +274,7 @@
         <plugin>
           <groupId>com.amashchenko.maven.plugin</groupId>
           <artifactId>gitflow-maven-plugin</artifactId>
-          <version>1.20.0</version>
+          <version>1.21.0</version>
           <configuration>
             <gitFlowConfig>
               <productionBranch>master</productionBranch>
@@ -296,7 +296,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-gpg-plugin</artifactId>
-          <version>3.1.0</version>
+          <version>3.2.2</version>
           <configuration>
             <gpgArguments>
               <arg>--batch</arg>
