@@ -4,8 +4,8 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>io.holixon.fixtures.bank._</groupId>
-    <artifactId>holi-bank-fixtures</artifactId>
+    <groupId>io.holixon.fixtures.holibank</groupId>
+    <artifactId>holi-bank-fixtures-root</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
 
@@ -20,8 +20,8 @@
   </properties>
 
   <modules>
-    <module>holi-bank-spring-boot</module>
-    <module>holi-bank-spring-boot-jpa</module>
+<!--    <module>holi-bank-spring-boot</module>-->
+<!--    <module>holi-bank-spring-boot-jpa</module>-->
   </modules>
 
 </project>

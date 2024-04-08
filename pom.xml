@@ -3,31 +3,34 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
+  <parent>
+    <groupId>io.toolisticon.maven.parent</groupId>
+    <artifactId>maven-parent-kotlin-base</artifactId>
+    <version>2024.3.2</version>
+    <relativePath/>
+  </parent>
+
   <name>Holi-Bank Fixtures - Root</name>
   <description>A working CQRS/ES application used as test fixtures for further lib development.</description>
   <url>https://github.com/holixon/holi-bank-fixtures/</url>
 
-  <groupId>io.holixon.fixtures.bank._</groupId>
-  <artifactId>holi-bank-fixtures</artifactId>
+  <groupId>io.holixon.fixtures.holibank</groupId>
+  <artifactId>holi-bank-fixtures-root</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <modules>
-    <module>fixtures</module>
+<!--    <module>fixtures</module>-->
     <!-- See below. Examples is included via profile -->
   </modules>
 
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
-    <java.version>11</java.version>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
 
     <axon-bom.version>4.9.4</axon-bom.version>
     <avro.version>1.11.3</avro.version>
-    <spring-boot.version>2.7.5</spring-boot.version>
+    <spring-boot.version>3.2.1</spring-boot.version>
 
     <jackson.version>2.12.3</jackson.version>
     <junit.version>4.13.2</junit.version>
@@ -65,7 +68,6 @@
   </dependencyManagement>
 
   <build>
-    <defaultGoal>clean package</defaultGoal>
     <pluginManagement>
       <plugins>
         <!-- Clean -->
@@ -99,20 +101,7 @@
           </executions>
         </plugin>
 
-        <!-- Resources -->
-        <plugin>
-          <artifactId>maven-resources-plugin</artifactId>
-          <version>3.3.1</version>
-          <configuration>
-            <encoding>UTF-8</encoding>
-          </configuration>
-        </plugin>
 
-        <!-- Install -->
-        <plugin>
-          <artifactId>maven-install-plugin</artifactId>
-          <version>3.1.1</version>
-        </plugin>
 
         <!-- Assembly -->
         <plugin>
@@ -191,159 +180,6 @@
           <version>3.2.5</version>
         </plugin>
 
-        <!-- KDoc generation -->
-        <plugin>
-          <groupId>org.jetbrains.dokka</groupId>
-          <artifactId>dokka-maven-plugin</artifactId>
-          <version>1.9.20</version>
-          <configuration>
-            <!-- Conditional on maven property set per-project -->
-            <skip>${dokka.skip}</skip>
-            <jdkVersion>${java.version}</jdkVersion>
-            <sourceLinks>
-              <link>
-                <path>${project.basedir}</path>
-                <url>https://github.com/holixon/holi-bank-fixtures/blob/master</url>
-                <lineSuffix>#L</lineSuffix>
-              </link>
-            </sourceLinks>
-          </configuration>
-          <executions>
-            <execution>
-              <phase>prepare-package</phase>
-              <goals>
-                <goal>dokka</goal>
-                <goal>javadocJar</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-
-        <!-- JAR -->
-        <plugin>
-          <artifactId>maven-jar-plugin</artifactId>
-          <version>3.3.0</version>
-          <configuration>
-            <archive>
-              <manifest>
-                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-              </manifest>
-            </archive>
-          </configuration>
-        </plugin>
-        <plugin>
-          <artifactId>maven-source-plugin</artifactId>
-          <version>3.3.1</version>
-          <executions>
-            <execution>
-              <id>attach-sources</id>
-              <phase>package</phase>
-              <goals>
-                <goal>jar-no-fork</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-
-        <!-- Enforcer -->
-        <plugin>
-          <artifactId>maven-enforcer-plugin</artifactId>
-          <version>3.4.1</version>
-          <executions>
-            <execution>
-              <id>enforce-java</id>
-              <phase>deploy</phase>
-              <goals>
-                <goal>enforce</goal>
-              </goals>
-              <configuration>
-                <rules>
-                  <requireJavaVersion>
-                    <version>${java.version}</version>
-                  </requireJavaVersion>
-                  <requireMavenVersion>
-                    <version>3.5</version>
-                  </requireMavenVersion>
-                </rules>
-              </configuration>
-            </execution>
-          </executions>
-        </plugin>
-
-        <!-- GitFlow -->
-        <plugin>
-          <groupId>com.amashchenko.maven.plugin</groupId>
-          <artifactId>gitflow-maven-plugin</artifactId>
-          <version>1.21.0</version>
-          <configuration>
-            <gitFlowConfig>
-              <productionBranch>master</productionBranch>
-              <developmentBranch>develop</developmentBranch>
-              <featureBranchPrefix>feature/</featureBranchPrefix>
-              <releaseBranchPrefix>release/</releaseBranchPrefix>
-              <hotfixBranchPrefix>hotfix/</hotfixBranchPrefix>
-              <supportBranchPrefix>support/</supportBranchPrefix>
-              <origin>origin</origin>
-            </gitFlowConfig>
-            <useSnapshotInHotfix>true</useSnapshotInHotfix>
-            <useSnapshotInRelease>true</useSnapshotInRelease>
-            <keepBranch>false</keepBranch>
-            <pushRemote>true</pushRemote>
-          </configuration>
-        </plugin>
-
-        <!-- To sign the artifacts -->
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-gpg-plugin</artifactId>
-          <version>3.2.2</version>
-          <configuration>
-            <gpgArguments>
-              <arg>--batch</arg>
-              <arg>--yes</arg>
-              <arg>--pinentry-mode</arg>
-              <arg>loopback</arg>
-            </gpgArguments>
-          </configuration>
-          <executions>
-            <execution>
-              <id>sign-artifacts</id>
-              <phase>verify</phase>
-              <goals>
-                <goal>sign</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-
-        <!-- Deploy -->
-        <plugin>
-          <artifactId>maven-deploy-plugin</artifactId>
-          <version>3.1.1</version>
-          <configuration>
-            <skip>true</skip>
-          </configuration>
-        </plugin>
-
-        <plugin>
-          <groupId>org.sonatype.plugins</groupId>
-          <artifactId>nexus-staging-maven-plugin</artifactId>
-          <version>1.6.13</version>
-          <executions>
-            <execution>
-              <id>default-deploy</id>
-              <phase>deploy</phase>
-              <goals>
-                <goal>deploy</goal>
-              </goals>
-              <configuration>
-                <serverId>ossrh</serverId>
-                <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                <autoReleaseAfterClose>true</autoReleaseAfterClose>
-              </configuration>
-            </execution>
-          </executions>
-        </plugin>
       </plugins>
     </pluginManagement>
 
@@ -364,38 +200,6 @@
 
   <profiles>
 
-    <!--
-    Profile creating all artifacts: JARs, POMs, Sources, JavaDoc and all signatures.
-    -->
-    <profile>
-      <id>release</id>
-      <activation>
-        <property>
-          <name>release</name>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-source-plugin</artifactId>
-          </plugin>
-          <plugin>
-            <groupId>org.jetbrains.dokka</groupId>
-            <artifactId>dokka-maven-plugin</artifactId>
-          </plugin>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-gpg-plugin</artifactId>
-          </plugin>
-          <plugin>
-            <groupId>org.sonatype.plugins</groupId>
-            <artifactId>nexus-staging-maven-plugin</artifactId>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-
     <profile>
       <!--
       Example module, should be skipped during release
@@ -411,14 +215,6 @@
       </modules>
     </profile>
   </profiles>
-
-  <pluginRepositories>
-    <pluginRepository>
-      <id>jcenter</id>
-      <name>JCenter</name>
-      <url>https://jcenter.bintray.com/</url>
-    </pluginRepository>
-  </pluginRepositories>
 
   <!-- deploy and release configuration -->
   <distributionManagement>

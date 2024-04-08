@@ -4,8 +4,8 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>io.holixon.fixtures.bank._</groupId>
-    <artifactId>holi-bank-fixtures</artifactId>
+    <groupId>io.holixon.fixtures.holibank</groupId>
+    <artifactId>holi-bank-fixtures-root</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
 
@@ -20,17 +20,17 @@
   </properties>
 
   <modules>
-    <!-- API -->
-    <module>holi-bank-command</module>
-    <module>holi-bank-query</module>
-    <!-- CRQS/ES domain implementation -->
-    <module>holi-bank-command-model</module>
-    <module>holi-bank-event</module>
-    <module>holi-bank-projection</module>
-    <!-- All modules from above -->
-    <module>holi-bank-all</module>
-    <!-- Adapter -->
-    <module>holi-bank-rest-adapter</module>
+<!--    &lt;!&ndash; API &ndash;&gt;-->
+<!--    <module>holi-bank-command</module>-->
+<!--    <module>holi-bank-query</module>-->
+<!--    &lt;!&ndash; CRQS/ES domain implementation &ndash;&gt;-->
+<!--    <module>holi-bank-command-model</module>-->
+<!--    <module>holi-bank-event</module>-->
+<!--    <module>holi-bank-projection</module>-->
+<!--    &lt;!&ndash; All modules from above &ndash;&gt;-->
+<!--    <module>holi-bank-all</module>-->
+<!--    &lt;!&ndash; Adapter &ndash;&gt;-->
+<!--    <module>holi-bank-rest-adapter</module>-->
 
   </modules>
 
