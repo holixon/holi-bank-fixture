@@ -29,7 +29,7 @@
     <maven.compiler.target>${java.version}</maven.compiler.target>
 
     <spring-boot.version>3.4.5</spring-boot.version>
-    <axon-bom.version>4.11.3</axon-bom.version>
+    <axon-bom.version>4.11.4</axon-bom.version>
     <avro.version>1.11.3</avro.version>
 
     <junit5.version>5.7.2</junit5.version>
