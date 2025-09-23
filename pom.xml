@@ -33,16 +33,8 @@
     <avro.version>1.12.0</avro.version>
 
     <junit5.version>5.7.2</junit5.version>
-    <jgiven.version>1.2.0</jgiven.version>
+    <jgiven.version>2.0.2</jgiven.version>
     <dom4j.version>2.1.3</dom4j.version>
-    <assertj.version>3.19.0</assertj.version>
-
-    <!-- deactivate by default -->
-    <jacoco.skip>true</jacoco.skip>
-    <dokka.skip>true</dokka.skip>
-    <maven.javadoc.skip>true</maven.javadoc.skip>
-    <maven.sources.skip>true</maven.sources.skip>
-    <gpg.skip>false</gpg.skip>
   </properties>
 
   <dependencyManagement>
@@ -54,125 +46,17 @@
         <scope>import</scope>
         <type>pom</type>
       </dependency>
-      <dependency>
-        <groupId>org.axonframework</groupId>
-        <artifactId>axon-bom</artifactId>
-        <version>${axon-bom.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
+<!--      <dependency>-->
+<!--        <groupId>org.axonframework</groupId>-->
+<!--        <artifactId>axon-bom</artifactId>-->
+<!--        <version>${axon-bom.version}</version>-->
+<!--        <type>pom</type>-->
+<!--        <scope>import</scope>-->
+<!--      </dependency>-->
     </dependencies>
   </dependencyManagement>
 
   <build>
-    <pluginManagement>
-      <plugins>
-
-        <!-- Java Compiler -->
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.14.1</version>
-          <configuration>
-            <encoding>${project.build.sourceEncoding}</encoding>
-            <source>${maven.compiler.source}</source>
-            <target>${maven.compiler.target}</target>
-          </configuration>
-          <executions>
-            <execution>
-              <id>java-test-compile</id>
-              <phase>test-compile</phase>
-              <goals>
-                <goal>testCompile</goal>
-              </goals>
-              <configuration>
-                <skip>${skipTests}</skip>
-              </configuration>
-            </execution>
-          </executions>
-        </plugin>
-
-
-
-        <!-- Assembly -->
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-assembly-plugin</artifactId>
-          <version>3.7.1</version>
-          <configuration>
-            <descriptorSourceDirectory>assembly</descriptorSourceDirectory>
-            <archiverConfig>
-              <duplicateBehavior>skip</duplicateBehavior>
-            </archiverConfig>
-          </configuration>
-        </plugin>
-
-        <!-- Release -->
-        <plugin>
-          <artifactId>maven-release-plugin</artifactId>
-          <version>3.1.1</version>
-          <configuration>
-            <mavenExecutorId>forked-path</mavenExecutorId>
-            <localCheckout>true</localCheckout>
-            <pushChanges>false</pushChanges>
-          </configuration>
-        </plugin>
-
-        <!-- Coverage -->
-        <plugin>
-          <groupId>org.jacoco</groupId>
-          <artifactId>jacoco-maven-plugin</artifactId>
-          <version>0.8.13</version>
-          <executions>
-            <execution>
-              <id>pre-unit-test</id>
-              <goals>
-                <goal>prepare-agent</goal>
-              </goals>
-            </execution>
-            <execution>
-              <id>pre-integration-test</id>
-              <goals>
-                <goal>prepare-agent-integration</goal>
-              </goals>
-            </execution>
-          </executions>
-        </plugin>
-
-        <!-- Surefire -->
-        <plugin>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>3.5.4</version>
-          <configuration>
-            <useSystemClassLoader>false</useSystemClassLoader>
-            <shutdown>kill</shutdown>
-            <runOrder>random</runOrder>
-            <includes>
-              <include>**/*Test.java</include>
-              <include>**/*Tests.java</include>
-              <include>**/*Test_*.java</include>
-              <include>**/*Tests_*.java</include>
-            </includes>
-            <!-- Sets the VM argument line used when unit tests are run. -->
-            <!-- prevent the annoying ForkedBooter process from stealing window focus on Mac OS -->
-            <argLine>-Djava.awt.headless=true ${argLine} -XX:+StartAttachListener -Xmx1024m -XX:MaxPermSize=256m</argLine>
-            <argLine>${surefireArgLine}</argLine>
-            <systemPropertyVariables>
-              <slf4j.version>1.7.30</slf4j.version>
-              <log4j.version>2.13.3</log4j.version>
-            </systemPropertyVariables>
-          </configuration>
-        </plugin>
-
-        <!-- Failsafe -->
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-failsafe-plugin</artifactId>
-          <version>3.5.4</version>
-        </plugin>
-
-      </plugins>
-    </pluginManagement>
 
     <!--
       Default build
@@ -188,24 +72,6 @@
       </plugin>
     </plugins>
   </build>
-
-  <profiles>
-
-    <profile>
-      <!--
-      Example module, should be skipped during release
-      -->
-      <id>examples</id>
-      <activation>
-        <property>
-          <name>!skipExamples</name>
-        </property>
-      </activation>
-      <modules>
-        <module>examples</module>
-      </modules>
-    </profile>
-  </profiles>
 
   <!-- deploy and release configuration -->
   <distributionManagement>
@@ -269,5 +135,4 @@
     <name>Holisticon AG</name>
     <url>https://holisticon.de</url>
   </organization>
-
 </project>
